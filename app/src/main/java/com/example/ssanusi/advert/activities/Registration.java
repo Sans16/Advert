@@ -1,15 +1,17 @@
 package com.example.ssanusi.advert.activities;
 
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.telephony.PhoneNumberUtils;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-
+import com.example.ssanusi.advert.MainActivity;
 import com.example.ssanusi.advert.R;
 import com.example.ssanusi.advert.interfaces.API;
 import com.example.ssanusi.advert.model.RegistrationRequest;
@@ -37,7 +39,7 @@ public class Registration extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (!validation()) return;
-                //sendDetails(firstName,lastName,emailAdd,phone);
+                sendDetails(firstName,lastName,emailAdd,phone);
             }
         });
     }
@@ -64,12 +66,32 @@ public class Registration extends AppCompatActivity {
             @Override
             public void onResponse(Call<RegistrationResponse> call, Response<RegistrationResponse> response) {
                 Log.i("Tag","it is reaching the endpoint");
+               showDialog();
             }
             @Override
             public void onFailure(Call<RegistrationResponse> call, Throwable t) {
-                Log.i("Tag","it is not reaching the endpoint");
+                Log.i("Tag","it is not reaching the endpoint"+t.getMessage());
             }
         });
+    }
+
+    private void showDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Confirmation").setMessage("Check your mail for your password")
+                .setPositiveButton("Email", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(Registration.this, MainActivity.class);
+                        startActivity(intent);
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        return;
+                    }
+                });
+        builder.show();
     }
 
     public boolean validation (){

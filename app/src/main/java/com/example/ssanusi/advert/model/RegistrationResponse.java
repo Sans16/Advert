@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 public class RegistrationResponse {
     @Expose @SerializedName("status") boolean status;
     @Expose @SerializedName("message") String message;
-    @Expose @SerializedName("status") Data data;
+    @Expose @SerializedName("data") Data data;
 
     private class Data {
         private RegistrationRequest registrationRequest;

@@ -31,9 +31,14 @@ dependencies {
 
     //The Retrofit library
     implementation 'com.google.code.gson:gson:2.8.2'
+    //2.6.2
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
-
+    //2.0.2
+    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
     // for validating phone number using code region
     implementation 'com.googlecode.libphonenumber:libphonenumber:8.9.9'
+
+    /* Needed for binding view with id */
+    implementation 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 }
