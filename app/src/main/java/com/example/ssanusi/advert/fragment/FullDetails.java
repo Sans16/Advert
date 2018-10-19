@@ -1,0 +1,172 @@
+package com.example.ssanusi.advert.fragment;
+
+import android.Manifest;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.ssanusi.advert.R;
+import com.example.ssanusi.advert.interfaces.Listener;
+
+/**
+ * A simple {@link Fragment} subclass.
+ * Activities that contain this fragment must implement the
+ * to handle interaction events.
+ * Use the {@link FullDetails#newInstance} factory method to
+ * create an instance of this fragment.
+ */
+public class FullDetails extends Fragment {
+    // TODO: Rename parameter arguments, choose names that match
+    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_PARAM3 = "param3";
+    private static final int REQUEST_CALL = 1;
+    TextView companyNameTv, descriptionTv,phoneNumber;
+    ImageView logoImg,call;
+    String phoneNumberStr;
+
+
+    // TODO: Rename and change types of parameters
+    private String companyName;
+    private String description;
+    private int logo;
+
+    private Listener mListener;
+
+    public FullDetails() {
+        // Required empty public constructor
+    }
+
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param param1 Parameter 1.
+     * @param param2 Parameter 2.
+     * @return A new instance of fragment FullDetails.
+     */
+    // TODO: Rename and change types and number of parameters
+    public static FullDetails newInstance(String param1, String param2, int param3) {
+        FullDetails fragment = new FullDetails();
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
+        args.putInt(ARG_PARAM3,param3);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            companyName = getArguments().getString(ARG_PARAM1);
+            description = getArguments().getString(ARG_PARAM2);
+            logo = getArguments().getInt(ARG_PARAM3);
+        }
+
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        companyNameTv = view.findViewById(R.id.companyNameTv);
+        descriptionTv = view.findViewById(R.id.descriptionTv);
+        phoneNumber = view.findViewById(R.id.phoneNumber);
+        phoneNumberStr = phoneNumber.getText().toString();
+        call = view.findViewById(R.id.call);
+        logoImg = view.findViewById(R.id.logo);
+        companyNameTv.setText(companyName);
+        descriptionTv.setText(description);
+        logoImg.setImageResource(logo);
+        call.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                makeCall();
+            }
+        });
+
+    }
+
+    public void makeCall(){
+        if (phoneNumberStr.trim().length()>0){
+            if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED){
+                ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.CALL_PHONE},REQUEST_CALL);
+            }else{
+                String dial = "tel:" + phoneNumberStr;
+                startActivity(new Intent(Intent.ACTION_CALL,Uri.parse(dial)));
+            }
+
+        }else{
+            Toast.makeText(getContext(),"No phone number",Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == REQUEST_CALL){
+            if (grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                makeCall();
+            }
+        }
+        else{
+            Toast.makeText(getContext(),"No phone number",Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_full_details, container, false);
+    }
+
+    // TODO: Rename method, update argument and hook method into UI event
+    public void onButtonPressed(Uri uri) {
+        if (mListener != null) {
+            mListener.onFragmentInteraction(uri);
+        }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof Listener) {
+            mListener = (Listener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    /**
+     * This interface must be implemented by activities that contain this
+     * fragment to allow an interaction in this fragment to be communicated
+     * to the activity and potentially other fragments contained in that
+     * activity.
+     * <p>
+     * See the Android Training lesson <a href=
+     * "http://developer.android.com/training/basics/fragments/communicating.html"
+     * >Communicating with Other Fragments</a> for more information.
+     */
+}

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".fragment.FullDetails">
+
+    <!-- TODO: Update blank fragment layout -->
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_marginStart="10dp"
+    android:layout_marginLeft="10dp"
+    >
+    <ImageView
+        android:layout_marginTop="8dp"
+        android:id="@+id/logo"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/ic_home_black_24dp"
+        />
+    <TextView
+        android:id="@+id/companyNameTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="SAKA"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        />
+</LinearLayout>
+
+    <TextView
+        android:id="@+id/descriptionTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="fdfdfdfddggd"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="20sp"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Contact:"
+            />
+
+        <TextView
+            android:id="@+id/phoneNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="07089182475"
+            android:layout_marginStart="4dp"
+            android:layout_marginLeft="4dp"
+            />
+
+        <View
+            android:layout_width="1.5dp"
+            android:layout_height="3dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginLeft="2dp"
+            />
+
+        <ImageView
+            android:id="@+id/call"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_phone_black_24dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            />
+
+
+    </LinearLayout>
+
+</LinearLayout>
