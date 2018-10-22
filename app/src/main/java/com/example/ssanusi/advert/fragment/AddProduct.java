@@ -3,31 +3,22 @@ package com.example.ssanusi.advert.fragment;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.example.ssanusi.advert.R;
 import com.example.ssanusi.advert.interfaces.Listener;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.Unbinder;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
  * to handle interaction events.
- * Use the {@link publishFragment#newInstance} factory method to
+ * Use the {@link AddProduct#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class publishFragment extends Fragment {
-    private Unbinder unbinder;
+public class AddProduct extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -39,7 +30,7 @@ public class publishFragment extends Fragment {
 
     private Listener mListener;
 
-    public publishFragment() {
+    public AddProduct() {
         // Required empty public constructor
     }
 
@@ -49,11 +40,11 @@ public class publishFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment publishFragment.
+     * @return A new instance of fragment AddProduct.
      */
     // TODO: Rename and change types and number of parameters
-    public static publishFragment newInstance(String param1, String param2) {
-        publishFragment fragment = new publishFragment();
+    public static AddProduct newInstance(String param1, String param2) {
+        AddProduct fragment = new AddProduct();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -74,15 +65,7 @@ public class publishFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_publish, container, false);
-        unbinder = ButterKnife.bind(this,view);
-        return view;
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        unbinder.unbind();
+        return inflater.inflate(R.layout.fragment_add_product, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -90,27 +73,6 @@ public class publishFragment extends Fragment {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
-    }
-
-    @OnClick(R.id.addBtnComPublish)
-    public void gotoAddCom(){
-        Fragment fragment = new AddCompany();
-        onClicked(fragment);
-    }
-
-    @OnClick(R.id.addBtnProPublish)
-    public void gotoAddPro(){
-        Fragment fragment = new AddProduct();
-        onClicked(fragment);
-    }
-
-
-    public void onClicked (@NonNull final Fragment fragment){
-        getFragmentManager().beginTransaction()
-                .addToBackStack(null)
-                .replace(R.id.frameLayoutForBottomNav, fragment)
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .commit();
     }
 
     @Override

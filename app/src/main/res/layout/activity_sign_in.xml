@@ -1,130 +1,148 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/faded_bg1"
     android:orientation="vertical"
     android:weightSum="1"
-    android:background="@drawable/testingbg"
     tools:context=".activities.SignIn">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.8"
-        android:orientation="vertical"
-        android:gravity="bottom"
-        android:layout_marginStart="30dp"
-        android:layout_marginLeft="30dp"
         android:layout_marginEnd="30dp"
+        android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
-        >
+        android:layout_marginStart="30dp"
+        android:layout_weight="0.8"
+        android:gravity="bottom"
+        android:orientation="vertical">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Sign In"
-            android:textSize="25sp"
-            android:textStyle="bold"
             android:textColor="@color/app_color"
-            />
+            android:textSize="25sp"
+            android:textStyle="bold" />
 
         <View
             android:layout_width="50dp"
             android:layout_height="4dp"
-            android:background="@color/app_color"
             android:layout_marginTop="8dp"
-            />
+            android:background="@color/app_color" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0.2"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:cardBackgroundColor="@color/app_color"
-            android:layout_marginTop="20dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginRight="20dp"
-            app:cardElevation="5dp"
             android:layout_marginBottom="15dp"
-            >
+            android:layout_marginEnd="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            app:cardBackgroundColor="@color/app_color"
+            app:cardElevation="5dp">
 
-
-              <EditText
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:textSize="14sp"
-                  android:layout_marginStart="16dp"
-                  android:layout_marginLeft="16dp"
-                  android:layout_marginRight="16dp"
-                  android:layout_marginEnd="16dp"
-                  android:hint="Email"
-                  android:textColorHint="#FFFFFF"
-                  android:paddingLeft="6dp"
-                  android:paddingRight="6dp"
-                  android:paddingTop="8dp"
-                  android:paddingBottom="8dp"
-                  android:singleLine="true"
-                  android:layout_marginTop="50dp"
-                  android:background="@drawable/sign_in_bg"
-
-                  />
-
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/emailSITL"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:hint="@string/email"
+                android:textColorHint="#FFFFFF"
+                app:errorEnabled="true">
 
                 <EditText
+                    android:id="@+id/emailSIEt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Password"
-                    android:textColorHint="#FFFFFF"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginStart="16dp"
+                    android:background="@drawable/sign_in_bg"
+                    android:inputType="textEmailAddress"
+                    android:paddingBottom="8dp"
                     android:paddingLeft="6dp"
                     android:paddingRight="6dp"
                     android:paddingTop="8dp"
-                    android:paddingBottom="8dp"
-                    android:layout_marginTop="150dp"
-                    android:textSize="14sp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginEnd="8dp"
                     android:singleLine="true"
+                    android:textColor="#FFFFFF"
+                    android:textColorHint="#FFFFFF"
+                    android:textSize="14sp" />
+
+            </android.support.design.widget.TextInputLayout>
+
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/passwordSITL"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="150dp"
+                android:hint="Password"
+                android:textColorHint="#FFFFFF"
+                app:errorEnabled="true">
+
+                <EditText
+                    android:id="@+id/passwordSIEt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="150dp"
                     android:background="@drawable/sign_in_bg"
-                    />
+                    android:inputType="textPassword"
+                    android:paddingBottom="8dp"
+                    android:paddingLeft="6dp"
+                    android:paddingRight="6dp"
+                    android:paddingTop="8dp"
+                    android:singleLine="true"
+                    android:textColor="#FFFFFF"
+                    android:textColorHint="#FFFFFF"
+                    android:textSize="14sp" />
+
+            </android.support.design.widget.TextInputLayout>
+
 
             <CheckBox
+                android:id="@+id/checkBoxSI"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="230dp"
-                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
-                android:layout_marginEnd="15dp"
-                android:text="Keep me Signed in"
-                android:textColor="#ffffff"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="230dp"
                 android:background="@android:color/transparent"
                 android:button="@drawable/check_box_selector"
-                android:textSize="10sp"
-                />
+                android:text="@string/keep_me_signed_in"
+                android:textColor="#ffffff"
+                android:textSize="10sp" />
 
             <TextView
+                android:id="@+id/forgotPasswordSI"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Forgot Password?"
-                android:layout_marginTop="300dp"
-                android:textColor="#FFFFFF"
                 android:layout_gravity="end|bottom"
+                android:layout_marginBottom="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_marginBottom="10dp"
-                />
+                android:layout_marginTop="300dp"
+                android:text="@string/forgot_password"
+                android:focusable="false"
+                android:textColor="#FFFFFF" />
         </android.support.v7.widget.CardView>
 
     </LinearLayout>
@@ -137,6 +155,7 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/regBtnSI"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
@@ -145,17 +164,18 @@
             android:layout_marginRight="20dp"
             android:layout_marginStart="20dp"
             android:layout_marginTop="8dp"
-            android:text="Do you have an account?"
+            android:focusable="false"
+            android:text="@string/click_me_to_register"
             android:textColor="@color/app_color" />
 
         <Button
+            android:id="@+id/signInBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#444444"
-            android:text="SIGN IN"
-            android:textSize="20sp"
+            android:text="@string/sign_in"
             android:textColor="@color/white"
-             />
+            android:textSize="20sp" />
 
     </LinearLayout>
 </LinearLayout>

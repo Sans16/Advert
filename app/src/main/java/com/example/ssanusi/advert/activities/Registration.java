@@ -2,6 +2,8 @@ package com.example.ssanusi.advert.activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,41 +21,57 @@ import com.example.ssanusi.advert.model.RegistrationResponse;
 import com.example.ssanusi.advert.retrofit.RetrofitClass;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnCheckedChanged;
+import butterknife.OnClick;
+import butterknife.OnTextChanged;
+import butterknife.OnTouch;
+import butterknife.Unbinder;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class Registration extends AppCompatActivity {
-    private EditText fn,ln,email,pn;
-    String firstName, lastName, emailAdd, phone;
-    Button regBtn;
+
+    @BindView(R.id.fnRegEt)EditText fn;
+    @BindView(R.id.lnRegEt)EditText ln;
+    @BindView(R.id.emailRegEt)EditText email;
+    @BindView(R.id.pnRegEt)EditText pn;
+    @BindView(R.id.regBtn)Button regBtn;
+    @BindView(R.id.loginBtn)Button loginBtn;
+    @BindView(R.id.pnRegTL)TextInputLayout pnRegTL;
+    @BindView(R.id.emailRegTL)TextInputLayout emailRegTL;
+
+    private String firstName, lastName, emailAdd, phone;
     private API api;
+    private Unbinder unbinder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
+        unbinder = ButterKnife.bind(this);
         assignment();
         api = RetrofitClass.initialize();
         regBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!validation()) return;
+                // TODO check for Internet Connection
                 sendDetails(firstName,lastName,emailAdd,phone);
             }
         });
     }
 
-    public void init (){
-        fn = findViewById(R.id.fnRegEt);
-        ln = findViewById(R.id.lnRegEt);
-        email = findViewById(R.id.emailRegEt);
-        pn = findViewById(R.id.pnRegEt);
-        regBtn = findViewById(R.id.regBtn);
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unbinder.unbind();
     }
 
     public void assignment (){
-        init();
         firstName = fn.getText().toString().trim();
         lastName = ln.getText().toString().trim();
         emailAdd = email.getText().toString().trim();
@@ -61,7 +79,7 @@ public class Registration extends AppCompatActivity {
     }
 
     public void sendDetails (String fn, String ln, String email , String pn){
-
+        // TODO progress dialog for the sign in progress
         api.signUpMethod(new RegistrationRequest(fn,ln,email,pn)).enqueue(new Callback<RegistrationResponse>() {
             @Override
             public void onResponse(Call<RegistrationResponse> call, Response<RegistrationResponse> response) {
@@ -81,8 +99,21 @@ public class Registration extends AppCompatActivity {
                 .setPositiveButton("Email", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(Registration.this, MainActivity.class);
-                        startActivity(intent);
+                        if (emailAdd.contains("@gmail.com")){
+                            //TODO set an intent to go to gmail using a webview
+                        }
+                        if (emailAdd.contains("@yahoo.com")){
+                            // TODO set an intent to go to yahoo using a webview
+                        }
+                        else{
+                            /*
+                            Since yahoo and gmail have been solved for others should go to gmail as
+                            default
+                             */
+                            //TODO set an intent to go to gmail using a webview
+                        }
+//                        Intent intent = new Intent(Registration.this, MainActivity.class);
+//                        startActivity(intent);
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -110,13 +141,13 @@ public class Registration extends AppCompatActivity {
         }
 
         if (TextUtils.isEmpty(emailAdd) || !Patterns.EMAIL_ADDRESS.matcher(emailAdd).matches()){
-            email.setError("Invalid email address");
+            emailRegTL.setError("Invalid email address");
             email.requestFocus();
             return false;
         }
 
         if (TextUtils.isEmpty(phone) || !Patterns.PHONE.matcher(phone).matches() || !isNumberValid("234",phone)){
-            pn.setError("Phone number not valid");
+            pnRegTL.setError("Phone number not valid");
             pn.requestFocus();
             return false;
         }
@@ -135,5 +166,49 @@ public class Registration extends AppCompatActivity {
             ex.printStackTrace();
         }
         return isValid;
+    }
+
+
+    /**
+     * This is the method that enable and disable the register button
+     */
+    @OnTextChanged({R.id.fnRegEt, R.id.lnRegEt, R.id.emailRegEt, R.id.pnRegEt})
+    public void checkFields(){
+        String check_first = fn.getText().toString().trim();
+        String check_last = ln.getText().toString().trim();
+        String check_email = email.getText().toString().trim();
+        String check_mobile = pn.getText().toString().trim();
+
+        if(TextUtils.isEmpty(check_first) || TextUtils.isEmpty(check_last)
+                || TextUtils.isEmpty(check_email) || TextUtils.isEmpty(check_mobile)){
+            //continueBtn.setTextColor(getResources().getColor(R.color.btn_inactive_text_color));
+            //continueBtn.setBackground(getResources().getDrawable(R.drawable.btn_inactive));
+            regBtn.setEnabled(false);
+        }else{
+            regBtn.setTextColor(Color.WHITE);
+            regBtn.setBackground(getResources().getDrawable(R.drawable.dark_black));
+            regBtn.setEnabled(true);
+        }
+    }
+
+    @OnClick(R.id.loginBtn)
+    public void goToSignInPage(){
+        Intent intent = new Intent(Registration.this,SignIn.class);
+        startActivity(intent);
+    }
+
+    @OnTouch({R.id.emailRegEt, R.id.pnRegEt})
+    public boolean clearError(View view){
+        switch (view.getId()){
+            case R.id.emailRegEt:
+                emailRegTL.setError(null);
+                break;
+            case R.id.pnRegEt:
+                pnRegTL.setError(null);
+                break;
+            default:
+                break;
+        }
+        return false;
     }
 }

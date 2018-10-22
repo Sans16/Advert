@@ -10,7 +10,7 @@
                 <shape android:shape="rectangle" >
                     <stroke
                         android:width="2dp"
-                        android:color="#CBCBCB" />
+                        android:color="#FFFFFF" />
 
                     <solid android:color="#00FFFFFF" />
 
@@ -59,14 +59,12 @@
                         android:color="#CBCBCB" />
 
                     <solid android:color="#00FFFFFF" />
-
                     <padding android:left="3dp"
                         android:right="3dp"
                         android:top="3dp"
                         android:bottom="3dp" />
                 </shape>
             </item>
-
         </layer-list>
     </item>
 

@@ -2,4 +2,12 @@
     <string name="app_name">Advert</string>
     <string name="btn_enable">Register</string>
     <string name="btn_disable">Fill Fields</string>
+    <string name="email">Email</string>
+    <string name="keep_me_signed_in">Keep me Signed in</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="sign_in">SIGN IN</string>
+    <string name="click_me_to_register">Click me to register</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

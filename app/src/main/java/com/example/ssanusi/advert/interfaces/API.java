@@ -1,5 +1,7 @@
 package com.example.ssanusi.advert.interfaces;
 
+import com.example.ssanusi.advert.model.LoginRequest;
+import com.example.ssanusi.advert.model.LoginResponse;
 import com.example.ssanusi.advert.model.RegistrationRequest;
 import com.example.ssanusi.advert.model.RegistrationResponse;
 
@@ -11,4 +13,8 @@ public interface API {
      String BASE_URL = "http://192.168.10.94:7800/api/";
      @POST("register")
      Call<RegistrationResponse> signUpMethod (@Body RegistrationRequest registrationRequest);
+
+     @POST("login")
+     Call<LoginResponse> loginMethod (@Body LoginRequest loginRequest);
+
 }

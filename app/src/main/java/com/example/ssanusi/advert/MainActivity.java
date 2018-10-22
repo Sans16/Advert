@@ -21,7 +21,7 @@ import com.example.ssanusi.advert.interfaces.Listener;
 
 import java.lang.reflect.Field;
 
-public class MainActivity extends AppCompatActivity implements Listener {
+public  class MainActivity extends AppCompatActivity implements Listener {
     BottomNavigationView bottomNavigationView;
     private Fragment selected;
 
@@ -98,6 +98,5 @@ public class MainActivity extends AppCompatActivity implements Listener {
 
     @Override
     public void onFragmentInteraction(Uri uri) {
-
     }
 }

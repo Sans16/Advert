@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:weightSum="1"
-    android:background="@drawable/testingbg"
+    android:background="@drawable/faded_bg1"
     tools:context=".activities.Registration">
 
     <LinearLayout
@@ -49,6 +49,7 @@
        android:gravity="center"
        >
        <android.support.design.widget.TextInputLayout
+           android:id="@+id/fnRegTL"
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
            android:background="@drawable/edit_text_background"
@@ -100,6 +101,7 @@
        </android.support.design.widget.TextInputLayout>
 
        <android.support.design.widget.TextInputLayout
+           android:id="@+id/emailRegTL"
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
            android:background="@drawable/edit_text_background"
@@ -124,6 +126,7 @@
        </android.support.design.widget.TextInputLayout>
 
        <android.support.design.widget.TextInputLayout
+           android:id="@+id/pnRegTL"
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
            android:background="@drawable/edit_text_background"
@@ -185,6 +188,7 @@
             />
 
         <Button
+            android:id="@+id/loginBtn"
             android:layout_width="70dp"
             android:layout_height="30dp"
             android:text="Login"
