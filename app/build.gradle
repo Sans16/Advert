@@ -41,4 +41,7 @@ dependencies {
     /* Needed for binding view with id */
     implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+
+    //The is to load image url
+    implementation 'com.github.bumptech.glide:glide:4.7.1'
 }

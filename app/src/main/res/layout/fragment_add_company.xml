@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragment.AddCompany"
-    android:background="@drawable/faded_bg1"
+
     android:orientation="vertical"
     >
 
@@ -24,12 +24,14 @@
             android:background="@color/gray"
             >
             <ImageView
+                android:id="@+id/companyLogoAC"
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
                 android:layout_gravity="center"
                 android:src="@drawable/ic_person_black_24dp"
                 />
             <ImageView
+                android:id="@+id/pick_image_AC"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:src="@drawable/ic_person_black_24dp"
@@ -49,6 +51,7 @@
             >
 
             <EditText
+                android:id="@+id/companyNameAC"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Company Name"
@@ -66,6 +69,7 @@
                 />
 
             <EditText
+                android:id="@+id/rcAC"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="RC"
@@ -78,6 +82,7 @@
                 android:textColorHint="@color/app_color"
                 />
             <EditText
+                android:id="@+id/categoryAC"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Category"
@@ -91,6 +96,7 @@
                 />
 
             <EditText
+                android:id="@+id/emailAddressAC"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Email Address"
@@ -103,6 +109,7 @@
                 android:textColorHint="@color/app_color"
                 />
             <EditText
+                android:id="@+id/caAC"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Company Address"
@@ -115,6 +122,7 @@
                 android:textColorHint="@color/app_color"
                 />
             <EditText
+                android:id="@+id/pnAC"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Phone number"
@@ -127,6 +135,7 @@
                 android:textColorHint="@color/app_color"
                 />
             <TextView
+                android:id="@+id/addNumAC"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Click to add from phone book"
@@ -155,6 +164,7 @@
                 android:layout_marginTop="5dp"
                 />
             <EditText
+                android:id="@+id/addDescriptionAC"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:layout_marginEnd="20dp"
@@ -168,7 +178,7 @@
                 android:hint="Let us know you" />
 
             <Button
-                android:id="@+id/regBtn"
+                android:id="@+id/uploadBtnAC"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:text="Upload"
@@ -176,11 +186,10 @@
                 android:background="@drawable/reg_btn_bg"
                 android:layout_gravity="center"
                 android:layout_marginTop="15dp"
+                android:layout_marginBottom="70dp"
                 />
 
 
         </LinearLayout>
-
-
     </LinearLayout>
 </ScrollView>
