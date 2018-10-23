@@ -8,6 +8,7 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -22,6 +23,8 @@ import com.example.ssanusi.advert.interfaces.API;
 import com.example.ssanusi.advert.model.LoginRequest;
 import com.example.ssanusi.advert.model.LoginResponse;
 import com.example.ssanusi.advert.retrofit.RetrofitClass;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -105,10 +108,10 @@ public class SignIn extends AppCompatActivity implements View.OnClickListener {
                 startActivity(intent);
                 break;
 
-//            case R.id.regBtnSI:
-//                intent = new Intent(SignIn.this,Registration.class);
-//                startActivity(intent);
-//                break;
+            case R.id.regBtnSI:
+                intent = new Intent(SignIn.this,Registration.class);
+                startActivity(intent);
+                break;
         }
     }
 
@@ -141,16 +144,25 @@ public class SignIn extends AppCompatActivity implements View.OnClickListener {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 if (response.isSuccessful()){
+                    Toast.makeText(getApplicationContext(),"login successful",Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(SignIn.this, MainActivity.class);
                     startActivity(intent);
                 }else{
-
+                    Gson gson = new GsonBuilder().create();
+                    try {
+                        LoginResponse error = gson.fromJson(response.errorBody().string(), LoginResponse.class);
+                        Toast.makeText(getBaseContext(), error.getMessage(),Toast.LENGTH_SHORT).show();
+                        Log.i("TAG",error.getMessage()+" ");
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                    Log.i("TAG","It is reaching the end point but not successful");
                 }
             }
 
             @Override
             public void onFailure(Call<LoginResponse> call, Throwable t) {
-
+                Log.i("TAG","It is not reaching the endpoint");
             }
         });
 

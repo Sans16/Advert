@@ -9,27 +9,14 @@
     android:background="@drawable/faded_bg"
     tools:context=".fragment.publishFragment">
 
-
-    <android.support.v7.widget.CardView
-        android:layout_width="300dp"
-        android:layout_height="200dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="15dp"
-        android:layout_gravity="center"
-        app:cardBackgroundColor="@android:color/transparent"
-        >
         <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:background="@drawable/publishbg"
+            android:layout_width="300dp"
+            android:layout_height="200dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:layout_gravity="center"
             >
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:contentDescription="This is the icon for company"
-                android:src="@drawable/publish_card_bg"
-                />
-
 
             <ImageView
                 android:layout_width="100dp"
@@ -65,19 +52,13 @@
 
         </FrameLayout>
 
-    </android.support.v7.widget.CardView>
-
-    <android.support.v7.widget.CardView
-        android:layout_width="300dp"
-        android:layout_height="200dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="15dp"
-        android:layout_gravity="center"
-        app:cardBackgroundColor="@android:color/transparent"
-        >
         <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:background="@drawable/publishbg"
+            android:layout_width="300dp"
+            android:layout_height="200dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:layout_gravity="center"
             >
 
             <ImageView
@@ -120,6 +101,5 @@
                 />
         </FrameLayout>
 
-    </android.support.v7.widget.CardView>
 
 </LinearLayout>
