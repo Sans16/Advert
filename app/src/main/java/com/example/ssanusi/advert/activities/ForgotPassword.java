@@ -23,7 +23,6 @@ import butterknife.OnTouch;
 import butterknife.Unbinder;
 
 public class ForgotPassword extends AppCompatActivity {
-
     @BindView(R.id.emailFPEt) EditText emailFPEt;
     @BindView(R.id.emailFPTL) TextInputLayout emailFPTL;
     @BindView(R.id.forgotPasswordBtn) Button forgotPasswordBtn;
