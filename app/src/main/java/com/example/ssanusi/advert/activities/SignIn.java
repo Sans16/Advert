@@ -23,6 +23,7 @@ import com.example.ssanusi.advert.interfaces.API;
 import com.example.ssanusi.advert.model.LoginRequest;
 import com.example.ssanusi.advert.model.LoginResponse;
 import com.example.ssanusi.advert.retrofit.RetrofitClass;
+import com.example.ssanusi.advert.utilities.AppPreference;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -144,6 +145,8 @@ public class SignIn extends AppCompatActivity implements View.OnClickListener {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 if (response.isSuccessful()){
+                    String token = response.body().getToken();
+                    AppPreference.setUserToken(token);
                     Toast.makeText(getApplicationContext(),"login successful",Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(SignIn.this, MainActivity.class);
                     startActivity(intent);

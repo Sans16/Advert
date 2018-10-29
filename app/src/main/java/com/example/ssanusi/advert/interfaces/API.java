@@ -1,5 +1,7 @@
 package com.example.ssanusi.advert.interfaces;
 
+import com.example.ssanusi.advert.model.ChangePasswordRequest;
+import com.example.ssanusi.advert.model.ChangePasswordResponse;
 import com.example.ssanusi.advert.model.LoginRequest;
 import com.example.ssanusi.advert.model.LoginResponse;
 import com.example.ssanusi.advert.model.RegistrationRequest;
@@ -7,6 +9,7 @@ import com.example.ssanusi.advert.model.RegistrationResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 
 public interface API {
@@ -16,5 +19,10 @@ public interface API {
 
      @POST("login")
      Call<LoginResponse> loginMethod (@Body LoginRequest loginRequest);
+
+     @POST("Change-Password")
+     Call<ChangePasswordResponse> changePasswordMethod (@Header("Authorization") String token,
+                                                        @Body ChangePasswordRequest changePasswordRequest);
+
 
 }
