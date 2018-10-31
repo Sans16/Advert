@@ -5,6 +5,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.example.ssanusi.advert.advertApp;
@@ -28,27 +29,44 @@ public class FileUploader {
         return RequestBody.create(okhttp3.MultipartBody.FORM, descriptionString);
     }
 
-    @NonNull
-    @TargetApi(19)
-    public static MultipartBody.Part prepareFilePart(String partName, ImageCapture imageCapture) {
+    @Nullable
+    public static MultipartBody.Part prepareFilePart(String partName, Uri fileUri) {
         Context context = advertApp.getInstance();
-//       File file = FileUtils.getFile(context, fileUri);
-        File file = new File(Uri.parse(imageCapture.getFileUrl()).getPath());
+        assert context != null;
 
-        //File file = FileUtils.getFile(context, fileUri);
+        File file = new File(fileUri.getPath());
+
         // create RequestBody instance from file
         //RequestBody requestFile = RequestBody.create(MediaType.parse(context.getContentResolver().getType(fileUri)), file);
 
-        if (imageCapture.getFileUrl().endsWith(".jpg") || imageCapture.getFileUrl().endsWith(".png")){
-            Log.i(TAG,"It is entering the image block");
-            requestFile = RequestBody.create(MediaType.parse("image/*"), file);
-        } else {
-            Log.i(TAG,"It is entering the video block");
-            requestFile = RequestBody.create(MediaType.parse("video/*"), file);
-            // MultipartBody.Part is used to send also the actual file name
-        }
-        return MultipartBody.Part.createFormData(partName, imageCapture.getFileName() /*file.getName()*/,requestFile);
+        RequestBody requestFile = RequestBody.create(MediaType.parse("image/*"), file);
+
+        // MultipartBody.Part is used to send also the actual file name
+        return MultipartBody.Part.createFormData(partName, file.getName(), requestFile);
     }
+
+
+//    @NonNull
+//    @TargetApi(19)
+//    public static MultipartBody.Part prepareFilePart(String partName, ImageCapture imageCapture) {
+//        Context context = advertApp.getInstance();
+////       File file = FileUtils.getFile(context, fileUri);
+//        File file = new File(Uri.parse(imageCapture.getFileUrl()).getPath());
+//
+//        //File file = FileUtils.getFile(context, fileUri);
+//        // create RequestBody instance from file
+//        //RequestBody requestFile = RequestBody.create(MediaType.parse(context.getContentResolver().getType(fileUri)), file);
+//
+//        if (imageCapture.getFileUrl().endsWith(".jpg") || imageCapture.getFileUrl().endsWith(".png")){
+//            Log.i(TAG,"It is entering the image block");
+//            requestFile = RequestBody.create(MediaType.parse("image/*"), file);
+//        } else {
+//            Log.i(TAG,"It is entering the video block");
+//            requestFile = RequestBody.create(MediaType.parse("video/*"), file);
+//            // MultipartBody.Part is used to send also the actual file name
+//        }
+//        return MultipartBody.Part.createFormData(partName, imageCapture.getFileName() /*file.getName()*/,requestFile);
+//    }
 
     public static long getFolderSize(File file) {
         long size = 0;

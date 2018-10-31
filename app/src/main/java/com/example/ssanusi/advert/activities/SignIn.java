@@ -22,8 +22,10 @@ import com.example.ssanusi.advert.R;
 import com.example.ssanusi.advert.interfaces.API;
 import com.example.ssanusi.advert.model.LoginRequest;
 import com.example.ssanusi.advert.model.LoginResponse;
+import com.example.ssanusi.advert.model.RegistrationRequest;
 import com.example.ssanusi.advert.retrofit.RetrofitClass;
 import com.example.ssanusi.advert.utilities.AppPreference;
+import com.example.ssanusi.advert.utilities.NetworkUtil;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -39,7 +41,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class SignIn extends AppCompatActivity implements View.OnClickListener {
-
     @BindView(R.id.emailSIEt)EditText emailSIET;
     @BindView(R.id.passwordSIEt)EditText passwordSIET;
     @BindView(R.id.checkBoxSI)CheckBox checkBoxSI;
@@ -50,6 +51,7 @@ public class SignIn extends AppCompatActivity implements View.OnClickListener {
     @BindView(R.id.passwordSITL)TextInputLayout passwordSITL;
     private Unbinder unbinder;
     private API api;
+    private Call<LoginResponse>call;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +72,18 @@ public class SignIn extends AppCompatActivity implements View.OnClickListener {
     @Override
     public void onBackPressed() {
         //super.onBackPressed();
+    }
+
+    /**
+     * This is created to stop the retrofit call on pause
+     */
+    @Override
+    protected void onPause() {
+        if (call!=null){
+            call.cancel();
+            call = null;
+        }
+        super.onPause();
     }
 
     /**
@@ -97,7 +111,7 @@ public class SignIn extends AppCompatActivity implements View.OnClickListener {
     public void checkChanged(){
         boolean isCheck = checkBoxSI.isChecked();
         if (isCheck){
-            // TODO persist log in here using shared preference
+            AppPreference.setIsLoggedIn(true);
         }
     }
 
@@ -137,16 +151,23 @@ public class SignIn extends AppCompatActivity implements View.OnClickListener {
     @OnClick(R.id.signInBtn)
     public void signInBtnClicked(){
         if (!validate()) return;
-        // TODO check for internet connection
+        if (!NetworkUtil.isNetworkAvailable(getApplicationContext())) {
+            Snackbar.make(findViewById(android.R.id.content),"Please check your connection",Snackbar.LENGTH_SHORT).show();
+            return;
+        }
         // TODO Progress Dialog to show progress
         String email = emailSIET.getText().toString().trim();
         String password = passwordSIET.getText().toString().trim();
-        api.loginMethod(new LoginRequest(email,password)).enqueue(new Callback<LoginResponse>() {
+        call = api.loginMethod(new LoginRequest(email,password));
+        call.enqueue(new Callback<LoginResponse>() {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 if (response.isSuccessful()){
                     String token = response.body().getToken();
+                    RegistrationRequest userDetails = response.body().getData();
                     AppPreference.setUserToken(token);
+                    Log.i("TAG",token);
+                    AppPreference.setUserDetails(userDetails);
                     Toast.makeText(getApplicationContext(),"login successful",Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(SignIn.this, MainActivity.class);
                     startActivity(intent);
@@ -166,26 +187,22 @@ public class SignIn extends AppCompatActivity implements View.OnClickListener {
             @Override
             public void onFailure(Call<LoginResponse> call, Throwable t) {
                 Log.i("TAG","It is not reaching the endpoint");
+                if (call.isCanceled()) {
+                    Log.e("TAG", "request was cancelled");
+                } else {
+                    Log.e("TAG", "other larger issue, i.e. no network connection?");
+                    Toast.makeText(getBaseContext(), "unable to perform operation, try again",Toast.LENGTH_SHORT).show();
+                }
             }
         });
-
-
     }
 
     public boolean validate(){
-        String email,password;
+        String email;
         email = emailSIET.getText().toString().trim();
-        password = passwordSIET.getText().toString().trim();
-
         if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
             emailSITL.setError("Invalid Email");
             emailSIET.requestFocus();
-            return false;
-        }
-
-        if (password.length() < 8){
-            passwordSITL.setError("Minimum of 8 characters required");
-            passwordSIET.requestFocus();
             return false;
         }
         return true;

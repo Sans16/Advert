@@ -179,7 +179,6 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="40dp"
                 android:drawableLeft="@drawable/ic_home_black_24dp"
-                android:background="@drawable/spinner_bg"
                 android:textColor="@color/orange"
                 android:spinnerMode="dialog"
                 android:prompt="@string/Select_the_company_of_the_product"

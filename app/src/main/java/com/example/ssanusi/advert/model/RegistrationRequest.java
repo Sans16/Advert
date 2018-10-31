@@ -16,6 +16,9 @@ public class RegistrationRequest {
         this.phonenumber = phonenumber;
     }
 
+    public RegistrationRequest() {
+    }
+
     public String getFirstname() {return firstname;}
     public void setFirstname(String firstname) {this.firstname = firstname;}
     public String getLastname() {return lastname;}

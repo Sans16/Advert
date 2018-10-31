@@ -17,6 +17,8 @@ import android.os.Environment;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -40,8 +42,20 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.ssanusi.advert.MainActivity;
 import com.example.ssanusi.advert.R;
+import com.example.ssanusi.advert.helper.FileUploader;
+import com.example.ssanusi.advert.helper.ImageCapture;
+import com.example.ssanusi.advert.interfaces.API;
 import com.example.ssanusi.advert.interfaces.Listener;
+import com.example.ssanusi.advert.model.ChangePasswordResponse;
 import com.example.ssanusi.advert.model.Contact;
+import com.example.ssanusi.advert.model.ForgotPasswordResponse;
+import com.example.ssanusi.advert.model.UploadRequest;
+import com.example.ssanusi.advert.model.UploadResponse;
+import com.example.ssanusi.advert.retrofit.RetrofitClass;
+import com.example.ssanusi.advert.utilities.AppPreference;
+import com.example.ssanusi.advert.utilities.NetworkUtil;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
 
@@ -50,12 +64,18 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class AddCompany extends Fragment {
     @BindView(R.id.companyLogoAC) ImageView companyLogo;
@@ -69,12 +89,12 @@ public class AddCompany extends Fragment {
     @BindView(R.id.addDescriptionAC) EditText addDescriptionET;
     @BindView(R.id.uploadBtnAC) Button uploadBtn;
 
+    private API api;
+    private Call<UploadResponse> call;
     private int maxNumber = 1;
     private HashMap<Integer,String> picture = new HashMap<>(maxNumber);
-
     private String companyName,rc,category,email,companyAdd,phone,description;
-
-    Intent intent;
+    private Intent intent;
     private Unbinder unbinder;
     private int id;
     private Contact Contact;
@@ -90,10 +110,18 @@ public class AddCompany extends Fragment {
     private static final String ARG_PARAM2 = "param2";
     private String mParam1;
     private String mParam2;
-
     private Listener mListener;
 
     public AddCompany() {
+    }
+
+    @Override
+    public void onPause() {
+        if (call!=null){
+            call.cancel();
+            call = null;
+        }
+        super.onPause();
     }
 
     // This is the method to call the intent to use camera
@@ -376,6 +404,12 @@ public class AddCompany extends Fragment {
     }
 
     @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        api = RetrofitClass.initialize();
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         unbinder.unbind();
@@ -405,21 +439,19 @@ public class AddCompany extends Fragment {
         mListener = null;
     }
 
-    public void assignment(){
-        companyAdd = companyAddressET.getText().toString();
-        companyName = companyNameET.getText().toString();
-        description = addDescriptionET.getText().toString();
+
+
+    public boolean allFieldsFilled(){
+        companyAdd = companyAddressET.getText().toString().trim();
+        companyName = companyNameET.getText().toString().trim();
+        description = addDescriptionET.getText().toString().trim();
         phone =phoneNumberET.getText().toString().trim();
         rc = rcACET.getText().toString().trim();
         email = emailAddressET.getText().toString().trim();
         category = categoryET.getText().toString().trim();
-    }
 
-    public boolean allFieldsFilled(){
-        assignment();
         if(picture.size()<maxNumber){
-            Toast.makeText(getActivity(),"Please kindly upload your logo",Toast.LENGTH_SHORT)
-                    .show();
+            Toast.makeText(getActivity(),"Please kindly upload your logo",Toast.LENGTH_SHORT).show();
             return false;
         }
         if(TextUtils.isEmpty(companyName)){
@@ -477,8 +509,105 @@ public class AddCompany extends Fragment {
     @OnClick(R.id.uploadBtnAC)
     public void upload(){
         if(!allFieldsFilled())return;
-        else{
-            Toast.makeText(getActivity(), "Succesfully Uploaded", Toast.LENGTH_SHORT).show();
+
+        if (!NetworkUtil.isNetworkAvailable(getActivity())) {
+            // TODO confirm how to use snackbar in a fragment
+            Snackbar.make(getView(),"Please check your connection",Snackbar.LENGTH_SHORT).show();
+            return;
         }
+        RequestBody companyNameBody =
+                RequestBody.create(
+                        MultipartBody.FORM, companyName);
+        RequestBody rcBody =
+                RequestBody.create(
+                        MultipartBody.FORM, rc);
+        RequestBody categoryBody =
+                RequestBody.create(
+                        MultipartBody.FORM, category);
+        RequestBody emailBody =
+                RequestBody.create(
+                        MultipartBody.FORM, email);
+        RequestBody companyAddressBody =
+                RequestBody.create(
+                        MultipartBody.FORM, companyAdd);
+        RequestBody phoneNumberBody =
+                RequestBody.create(
+                        MultipartBody.FORM, phone);
+        RequestBody descriptionBody =
+                RequestBody.create(
+                        MultipartBody.FORM, description);
+
+        String token = AppPreference.getUserToken();
+        MultipartBody.Part pictureFile = FileUploader.prepareFilePart("logo", Uri.fromFile(photoFile));
+
+        Log.i("TAG",rc.length()+"");
+        Log.i("TAG",phone.length()+"");
+       // call = api.sendFiles(token, new UploadRequest(companyName,rc, category, phone, companyAdd, email, description));
+        call = api.sendFiles(token,companyNameBody,rcBody,categoryBody,phoneNumberBody,companyAddressBody,emailBody,descriptionBody,pictureFile);
+        call.enqueue(new Callback<UploadResponse>() {
+            @Override
+            public void onResponse(Call<UploadResponse> call, Response<UploadResponse> response) {
+                int errorCode = response.code();
+                //Log.i("TAG","it is succesful");
+
+                if (response.isSuccessful()){
+                    Log.i("TAG","correct");
+                    Toast.makeText(getActivity(), "Succesfully Uploaded, wait for confirmation", Toast.LENGTH_SHORT).show();
+                }
+                else if (response.code() == 400){
+                    Gson gson = new GsonBuilder().create();
+                    try {
+
+                       UploadResponse error = gson.fromJson(response.errorBody().string(), UploadResponse.class);
+                        List<String> message = error.getMessage();
+                        for (String messageStr :message){
+                            Log.i("TAG",messageStr);
+                            Toast.makeText(getActivity(), messageStr, Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                    Log.i("TAG","error 400");
+                }
+                else if (response.code() == 500){
+                    Toast.makeText(getActivity(), "unable to perform operation, try again",Toast.LENGTH_SHORT).show();
+                    Log.i("TAG","error 500");
+                }
+                else if (response.code() == 401) {
+                    Log.i("TAG","error ooooooo");
+                    Gson gson = new GsonBuilder().create();
+                    try {
+                        Log.i("TAG","error gan gan");
+                        UploadResponse error = gson.fromJson(response.errorBody().string(), UploadResponse.class);
+                        Log.i("TAG","error na wo");
+                        Toast.makeText(getActivity(), error.getError(), Toast.LENGTH_SHORT).show();
+                        Log.i("TAG","error 401");
+                    } catch (Exception ex) {
+                        Log.i("TAG",ex.getMessage());
+                        ex.printStackTrace();
+                    }
+                }
+                else{
+                    Log.i("TAG",""+errorCode);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UploadResponse> call, Throwable t) {
+                Log.i("TAG","it is not succesful");
+                if (call.isCanceled()) {
+                    Log.e("TAG", "request was cancelled");
+                } else {
+                    Log.e("TAG", "other larger issue, i.e. no network connection?");
+                    Toast.makeText(getActivity(), "unable to perform operation, try again",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
+
+
+
+
+
+
 }

@@ -99,4 +99,9 @@ public  class MainActivity extends AppCompatActivity implements Listener {
     @Override
     public void onFragmentInteraction(Uri uri) {
     }
+
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+    }
 }
